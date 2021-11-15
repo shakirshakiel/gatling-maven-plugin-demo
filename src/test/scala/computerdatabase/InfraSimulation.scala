@@ -7,7 +7,7 @@ import scala.concurrent.duration._
 class InfraSimulation extends Simulation {
 
   val httpProtocol = http
-    .baseUrl("https://app.example.com")
+    .baseUrl(s"${sys.env("DOMAIN")}")
 
   def getTestEndpoint() = exec(http("get test ep").get("/infra/go/test"))
 
