@@ -9,22 +9,13 @@ class InfraSimulation extends Simulation {
   val httpProtocol = http
     .baseUrl(s"${sys.env("DOMAIN")}")
 
-  def getTestEndpoint() = exec(http("get test ep").get("/infra/go/test"))
-
-  def getSlowEndpoint() = exec(http("get test ep").get("/infra/go/retry"))
-
-  def postTestEndpoint() = exec(
-    http("post test ep").post("/infra/go/post")
-    .bodyPart(RawFileBodyPart("raw", "src/test/resources/infra.raw").fileName("infra.raw").transferEncoding("binary"))
-    .asMultipartForm)
+  def getTestEndpoint() = exec(http("get test ep").get("/beacon"))
 
   var runOutOfSockets = scenario("Run out of sockets")
     .exec(getTestEndpoint())
-    .exec(postTestEndpoint())
-    .exec(getSlowEndpoint())
 
   setUp(
-    runOutOfSockets.inject(constantConcurrentUsers(50) during (15 minutes))
+    runOutOfSockets.inject(constantConcurrentUsers(50) during (1 minutes))
     .protocols(httpProtocol)
     )
 }
