@@ -15,7 +15,7 @@ class InfraSimulation extends Simulation {
     .exec(getTestEndpoint())
 
   setUp(
-    runOutOfSockets.inject(constantConcurrentUsers(50) during (1 minutes))
+    runOutOfSockets.inject(constantConcurrentUsers(50) during (60 minutes))
     .protocols(httpProtocol)
     )
 }
